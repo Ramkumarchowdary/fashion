@@ -1,32 +1,39 @@
-// import React from 'react'
-
+import { Pagination } from "@mui/material";
 import Fetchapi from "./Fetchapi";
-
-// import Fetchapi from "./Fetchapi"
-
+import "./Main.css";
+import { useState } from "react";
 const Main = () => {
-  const { data, isLoading, error } = Fetchapi("https://dummyjson.com/products?limit=20");
+  const [page, setPage] = useState(1);
+  
+  const { data } = Fetchapi(
+    `https://dummyjson.com/products?limit=20&skip=${page * 20 - 20}`
+  );
 
-  if (error) return <p>Error!</p>;
-  if (isLoading) return <p>Loading...</p>;
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
   return (
     <div>
-      
-        {data?.map((item, i) => (
-            
-          <div key={i} style={{
-            borderBottom: "2px solid black",
-            textAlign: "center",
-            padding: "10px",
-            margin: "10px 0",
-            
-          }}>
-           <h1>{item.brand}</h1>
-           <img src={item?.images} alt={item.brand} style={{width:"500px"}} />
-          {console.log(item.images)}
-          </div>
-        ))}
-      
+      <div className="products">
+        {data.map((prod) => {
+          return (
+            <span className="products__single" key={prod.id}>
+              <img src={prod.thumbnail} alt={prod.title} />{" "}
+              <span>{prod.title.split("").splice(0, 20).join("")}</span>
+            </span>
+          );
+        })}
+      </div>
+      {data.length > 0 && (
+        <div className="pagination">
+          <Pagination
+            count={10}
+            page={page}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </div>
+      )}
     </div>
   );
 };
