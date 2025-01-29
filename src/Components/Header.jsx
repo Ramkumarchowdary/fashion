@@ -3,7 +3,7 @@
 const Header = () => {
   return (
     <div>
-      <h1>Well come to Fashion World </h1>
+      <h1>Welcome to Fashion World </h1>
     </div>
   );
 };
